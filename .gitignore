@@ -1,0 +1,52 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+pom.xml.*
+release.properties
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+/.gtm/
+
+.vscode
+
+/web/node_modules
+/web/API
+/web/package.json
+/web/package-lock.json
+/web/gulpfile.js
+/web/src/js/server.js
+/web/src/ignore
+# vim
+*.swp
+**/**/rebel.xml
+
+# mockserver
+mockserver.log
+
+### 忽略本地local配置文件. ###
+server/src/main/resources/application-local.yml
+
+server/src/main/asciidoc/swagger/
+/admin-web/src/js/server.js
+
+# git
+*.orig
+
