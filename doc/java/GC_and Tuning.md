@@ -1,6 +1,6 @@
 # GC和GC Tuning
 
-作者：马士兵教育 http://mashibing.com
+
 
 ### GC的基础知识
 
