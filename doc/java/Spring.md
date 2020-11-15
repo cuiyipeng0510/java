@@ -1,4 +1,4 @@
-![image-20200808235539151](D:\工具\Typora\document\images\ioc工作原理.png)
+![image-20200808235539151](images\ioc工作原理.png)
 
 Spring 加载Bean 容器方式
 
@@ -10,7 +10,7 @@ Spring 加载Bean 容器方式
 
 
 
-![image-20200809002248787](D:\工具\Typora\document\images\spring加载流程图1.png)
+![image-20200809002248787](images\spring加载流程图1.png)
 
 
 
@@ -18,15 +18,15 @@ Spring 加载Bean 容器方式
 
 源码顺序：refresh() 13个关键方法
 
-![image-20200812205533283](D:\工具\Typora\document\images\spring创建Bean过程.png)
+![image-20200812205533283](images\spring创建Bean过程.png)
 
 
 
-![image-20200812210953765](D:\工具\Typora\document\images\spring三级缓存核心代码.png)
+![image-20200812210953765](images\spring三级缓存核心代码.png)
 
 
 
-![image-20200812213044132](D:\工具\Typora\document\images\spring三级缓存放置内容.png)
+![image-20200812213044132](images\spring三级缓存放置内容.png)
 
 
 
@@ -34,4 +34,4 @@ Spring 加载Bean 容器方式
 
 
 
-![image-20200812215225125](D:\工具\Typora\document\images\三级缓存问题解释.png)
+![image-20200812215225125](images\三级缓存问题解释.png)

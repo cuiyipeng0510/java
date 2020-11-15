@@ -1,12 +1,12 @@
-![image-20200816005948212](D:\工具\Typora\document\images\git.png)
+![image-20200816005948212](images\git.png)
 
 
 
-![image-20200816010101117](D:\工具\Typora\document\images\git库关系.png)
+![image-20200816010101117](images\git库关系.png)
 
 
 
-![image-20200816010252524](D:\工具\Typora\document\images\git跨团队协作.png)
+![image-20200816010252524](images\git跨团队协作.png)
 
 
 

@@ -781,14 +781,14 @@ OOM产生的原因多种多样，有些程序未必产生OOM，不断FGC(CPU飙�
 
 #### 作业
 
-1. -XX:MaxTenuringThreshold控制的是什么？
+1. -XX:MaxTenuringThreshold 控制的是什么？
    A: 对象升入老年代的年龄
      	B: 老年代触发FGC时的内存垃圾比例
 
 2. 生产环境中，倾向于将最大堆内存和最小堆内存设置为：（为什么？）
    A: 相同 B：不同
 
-3. JDK1.8默认的垃圾回收器是：
+3. JDK1.8 默认的垃圾回收器是：
    A: ParNew + CMS
      	B: G1
      	C: PS + ParallelOld

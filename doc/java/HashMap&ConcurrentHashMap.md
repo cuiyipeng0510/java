@@ -36,15 +36,15 @@ hash 冲突
 
    & 与操作  （二进制、 都为 1 才为1）
 
-   ![image-20200810005910392](D:\工具\Typora\document\images\与操作.png)
+   ![image-20200810005910392](images\与操作.png)
 
-   ![image-20200810002044917](D:\工具\Typora\document\images\hashMap-插入同一位置数据处理方式.png)
+   ![image-20200810002044917](images\hashMap-插入同一位置数据处理方式.png)
 
-   ![image-20200810002322151](D:\工具\Typora\document\images\hashMap链表移动.png)
+   ![image-20200810002322151](images\hashMap链表移动.png)
 
 数组 + 链表
 
-![image-20200809005257702](D:\工具\Typora\document\images\红黑树.png)
+![image-20200809005257702](images\红黑树.png)
 
 链表：
 
@@ -52,9 +52,9 @@ hash 冲突
 
 效率： 位运算 是 取模运算的 十倍
 
-![image-20200809191427931](D:\工具\Typora\document\images\hashMap工作原理jdk1.7.png)
+![image-20200809191427931](images\hashMap工作原理jdk1.7.png)
 
-![image-20200809224740858](D:\工具\Typora\document\images\hashmap链表转红黑树.png)
+![image-20200809224740858](images\hashmap链表转红黑树.png)
 
 
 
