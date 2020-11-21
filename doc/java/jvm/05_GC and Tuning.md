@@ -91,7 +91,7 @@
    几十个G的内存，单线程回收 -> G1 + FGC 几十个G -> 上T内存的服务器 ZGC
    算法：三色标记 + Incremental Update
 8. G1(10ms)
-   算法：三色标记 + SATB
+   算法：三色标记 + SATB(处理漏标问题，灰色指向白色引用消失，该引用会被 push堆栈记录，remark阶段可以拿到这个引用，由于有rset 的存在，不需要扫描真个堆)
 9. ZGC (1ms) PK C++
    算法：ColoredPointers + LoadBarrier
 10. Shenandoah
@@ -541,16 +541,18 @@ jhat -J-mx512M xxx.dump
 ### G1
 
 1. ▪https://www.oracle.com/technical-resources/articles/java/g1gc.html
+2. MinedGC
+   - 
 
 #### G1日志详解
 
 ```java
 [GC pause (G1 Evacuation Pause) (young) (initial-mark), 0.0015790 secs]
-//young -> 年轻代 Evacuation-> 复制存活对象 
-//initial-mark 混合回收的阶段，这里是YGC混合老年代回收
+//young -> 年轻代 Evacuation-> 复制存活对象 【regin迁移】
+//initial-mark 混合回收的阶段，这里是YGC混合老年代回收【mixdGC 阶段标记】
    [Parallel Time: 1.5 ms, GC Workers: 1] //一个GC线程
       [GC Worker Start (ms):  92635.7]
-      [Ext Root Scanning (ms):  1.1]
+      [Ext Root Scanning (ms):  1.1] //根对象开始搜索
       [Update RS (ms):  0.0]
          [Processed Buffers:  1]
       [Scan RS (ms):  0.0]
@@ -563,7 +565,7 @@ jhat -J-mx512M xxx.dump
       [GC Worker End (ms):  92636.9]
    [Code Root Fixup: 0.0 ms]
    [Code Root Purge: 0.0 ms]
-   [Clear CT: 0.0 ms]
+   [Clear CT: 0.0 ms] // cades table
    [Other: 0.1 ms]
       [Choose CSet: 0.0 ms]
       [Ref Proc: 0.0 ms]
@@ -578,7 +580,7 @@ jhat -J-mx512M xxx.dump
 [GC concurrent-root-region-scan-start]
 [GC concurrent-root-region-scan-end, 0.0000078 secs]
 [GC concurrent-mark-start]
-//无法evacuation，进行FGC
+//无法evacuation （复制存活对象），进行FGC
 [Full GC (Allocation Failure)  18M->18M(20M), 0.0719656 secs]
    [Eden: 0.0B(1024.0K)->0.0B(1024.0K) Survivors: 0.0B->0.0B Heap: 18.8M(20.0M)->18.8M(20.0M)], [Metaspace: 38
 76K->3876K(1056768K)] [Times: user=0.07 sys=0.00, real=0.07 secs]
@@ -679,7 +681,7 @@ OOM产生的原因多种多样，有些程序未必产生OOM，不断FGC(CPU飙�
    finalize耗时比较长（200ms）
    
 10. 如果有一个系统，内存一直消耗不超过10%，但是观察GC日志，发现FGC总是频繁产生，会是什么引起的？
-    System.gc() (这个比较Low)
+    有人显式调用了系统 System.gc() (这个比较Low)
 
 11. Distuptor有个可以设置链的长度，如果过大，然后对象大，消费完不主动释放，会溢出 (来自 死物风情)
 
@@ -694,41 +696,61 @@ OOM产生的原因多种多样，有些程序未必产生OOM，不断FGC(CPU飙�
 
 * -Xmn -Xms -Xmx -Xss
   年轻代 最小堆 最大堆 栈空间
+  
 * -XX:+UseTLAB
   使用TLAB，默认打开
+  
 * -XX:+PrintTLAB
   打印TLAB的使用情况
+  
 * -XX:TLABSize
   设置TLAB大小
+  
 * -XX:+DisableExplictGC
   System.gc()不管用 ，FGC
+  
 * -XX:+PrintGC
+
 * -XX:+PrintGCDetails
+
 * -XX:+PrintHeapAtGC
+
 * -XX:+PrintGCTimeStamps
+
 * -XX:+PrintGCApplicationConcurrentTime (低)
   打印应用程序时间
+  
 * -XX:+PrintGCApplicationStoppedTime （低）
   打印暂停时长
+  
 * -XX:+PrintReferenceGC （重要性低）
   记录回收了多少种不同引用类型的引用
+  
 * -verbose:class
   类加载详细过程
+  
 * -XX:+PrintVMOptions
+
 * -XX:+PrintFlagsFinal  -XX:+PrintFlagsInitial
   必须会用
+  
+  ![image-20201122011854920](查看GC参数.png)
+  
 * -Xloggc:opt/log/gc.log
+
 * -XX:MaxTenuringThreshold
   升代年龄，最大值15
+  
 * 锁自旋次数 -XX:PreBlockSpin 热点代码检测参数-XX:CompileThreshold 逃逸分析 标量替换 ... 
   这些不建议设置
 
 ### Parallel常用参数
 
-* -XX:SurvivorRatio
+* -XX:SurvivorRatio **（8:1:1）**
 * -XX:PreTenureSizeThreshold
   大对象到底多大
 * -XX:MaxTenuringThreshold
+  * 升代年龄，最大值15
 * -XX:+ParallelGCThreads
   并行收集器的线程数，同样适用于CMS，一般设为和CPU核数相同
 * -XX:+UseAdaptiveSizePolicy
@@ -773,11 +795,11 @@ OOM产生的原因多种多样，有些程序未必产生OOM，不断FGC(CPU飙�
 * ConcGCThreads
   线程数量
 * InitiatingHeapOccupancyPercent
-  启动G1的堆空间占用比例
+  启动G1的堆空间占用比例 默认 %45
 
 
 
-#### 作业
+#### 题
 
 1. -XX:MaxTenuringThreshold 控制的是什么？
    A: 对象升入老年代的年龄
