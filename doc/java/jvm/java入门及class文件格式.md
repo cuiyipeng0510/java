@@ -36,7 +36,7 @@
 ### class加载过程
 ![image-20201121161229661](类加载过程详解.png)
 - verification(验证文件是否符合jvm规定)
-- preparation(静态变脸赋默认值)
+- preparation(静态变量赋默认值)
 - resolution
 - initializing(调用类构造函数，静态变量值初始化)
 
@@ -183,8 +183,8 @@
 
 - 对象头具体包括什么
 1. markword源码，c++ 实现
-  ![image-20201122231433354](markword源码.png)
-  ![image-20201122231347662](markword64位.png)
+    ![image-20201122231433354](markword源码.png)
+    ![image-20201122231347662](markword64位.png)
 > 锁：三为，两位锁标记，一位偏向记录
 > hashCode,重写，与默认（System.identityHashCode)
 GC 分代大小 markword中gc分代年龄只有4位，所以最大是15
