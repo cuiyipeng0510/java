@@ -777,6 +777,23 @@ OOM产生的原因多种多样，有些程序未必产生OOM，不断FGC(CPU飙�
 
 ### G1常用参数
 
+```
+-Xms1024M
+-Xmx1024M
+-XX:+UseG1GC
+-Xloggc:F:\jvmlog\dev\dossiers-gc-%t.log
+-XX:+UseGCLogFileRotation
+-XX:NumberOfGCLogFiles=5
+-XX:GCLogFileSize=20M
+-XX:+PrintGCDetails
+-XX:+PrintGCDateStamps
+-XX:+PrintGCCause
+-XX:InitiatingHeapOccupancyPercent=30
+-XX:MaxGCPauseMillis=50
+```
+
+
+
 * -XX:+UseG1GC
 * -XX:MaxGCPauseMillis
   建议值，G1会尝试调整Young区的块数来达到这个值
