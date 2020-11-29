@@ -18,7 +18,8 @@ package com.cuiyp.demo.leetcode;
 public class DataDesign_Array {
 
     public static void main(String[] args) {
-
+        int i = Runtime.getRuntime().availableProcessors();
+        System.out.println();
     }
 
     // 一个数组中有两种数出现了奇数次、其他数都出现了偶数次、怎么找到这两种数并打印
