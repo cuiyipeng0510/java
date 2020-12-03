@@ -3,47 +3,70 @@ package com.cuiyp.demo.leetcode.queue;
 import com.cuiyp.demo.leetcode.queue.catordog.Cat;
 import com.cuiyp.demo.leetcode.queue.catordog.Dog;
 import com.cuiyp.demo.leetcode.queue.catordog.Pet;
-import org.assertj.core.util.Lists;
 
-import java.util.List;
 import java.util.Stack;
 
 public class CatAndDogQueue<T> {
-    private Stack<T> stack;
-    private volatile int catSize;
-    private volatile int dogSize;
-    public CatAndDogQueue(){
-        this.stack = new Stack<T>();
+    private Stack<Dog> dogStack;
+    private Stack<Cat> catStack;
+
+    public CatAndDogQueue() {
+        this.dogStack = new Stack<>();
+        this.catStack = new Stack<>();
     }
 
-    public void add(Pet pet){
-        if(pet instanceof Dog){
-            dogSize ++;
+    public void add(Pet pet) {
+        if (pet instanceof Dog) {
+            dogStack.push((Dog) pet);
         }
-        if(pet instanceof Cat){
-            catSize ++;
+        if (pet instanceof Cat) {
+            catStack.push((Cat) pet);
         }
-        stack.push((T) pet);
     }
 
-    public List<T> pollAll() {
-        List<T> all = Lists.newArrayList();
-        while (!stack.isEmpty()) {
-            all.add(stack.pop());
+    public Pet pollAll() {
+        if (dogStack.isEmpty() && catStack.isEmpty()) {
+            throw new RuntimeException("没宠物了");
         }
-        return all;
+        if (!catStack.isEmpty() && !dogStack.isEmpty()) {
+            if (dogStack.peek().getTimeStamp() > catStack.peek().getTimeStamp()) {
+                return catStack.pop();
+            } else {
+                return dogStack.pop();
+            }
+        }
+        if (dogStack.isEmpty()) {
+            return catStack.pop();
+        } else {
+            return dogStack.pop();
+        }
     }
 
-    public boolean isEmpty(){
-        return stack.isEmpty();
+    public Dog pollDog() {
+        if (!dogStack.isEmpty()) {
+            return dogStack.pop();
+        }
+        throw new RuntimeException("没狗了");
     }
 
-    public boolean isDogEmpty(){
-        return dogSize == 0;
+    public Cat pollCat() {
+        if (!catStack.isEmpty()) {
+            return catStack.pop();
+        }
+        throw new RuntimeException("没猫了");
     }
 
-    public boolean isCatEmpty(){
-        return catSize == 0;
+
+    public boolean isEmpty() {
+        return dogStack.isEmpty() && catStack.isEmpty();
+    }
+
+    public boolean isDogEmpty() {
+        return dogStack.isEmpty();
+    }
+
+    public boolean isCatEmpty() {
+        return catStack.isEmpty();
     }
 
 }
