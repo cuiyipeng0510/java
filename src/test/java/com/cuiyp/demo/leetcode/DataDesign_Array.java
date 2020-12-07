@@ -1,5 +1,7 @@
 package com.cuiyp.demo.leetcode;
 
+import java.util.Arrays;
+
 /**
  * 总纲:
  * 1. | 或运算 有1 为1 没有为 0、
@@ -19,6 +21,8 @@ public class DataDesign_Array {
 
     public static void main(String[] args) {
         int i = Runtime.getRuntime().availableProcessors();
+        int[] ints = generateRandomArray(10, 5);
+        Arrays.sort(ints);
         System.out.println();
     }
 
