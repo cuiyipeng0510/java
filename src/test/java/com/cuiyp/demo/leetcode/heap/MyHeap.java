@@ -2,10 +2,20 @@ package com.cuiyp.demo.leetcode.heap;
 
 import com.cuiyp.demo.leetcode.utils.ArrayUtils;
 
+import java.util.HashMap;
+
+/**
+ * 1. 堆排序
+ *    存储变量 数组
+ *
+ * @param <T>
+ */
 public class MyHeap<T> {
     private int[] heap;
     private final int limit;
     private int heapSize;
+    //支持 动态修改Object 对象内部属性，并且还能保持 大根堆
+    private HashMap<T, Integer> map = new HashMap<>();
     private Comparable<T> comparable;
 
     public MyHeap(Comparable<T> comparable, int limit) {
@@ -15,7 +25,7 @@ public class MyHeap<T> {
     }
 
     private boolean isEmpty(){
-        return limit == 0;
+        return heapSize == 0;
     }
     private boolean isFull(){
         return limit == heapSize;
