@@ -1,3 +1,68 @@
+### 第一章 多线程基础
+
+#### 1. 线程间通信
+
+- 方式1  wait()**/**notify() 必须与 synchronized 配合使用
+
+  - wait()  --- 线程阻塞进入等待状态
+
+  - notify() --- 唤醒 waitting 状态中的任意一个线程  notifyAll() -- 唤醒所有
+
+    ```java
+    // 这两个方法必须 配合 synchronized 关键字使用
+    // wait() 方法内部会先释放锁，然后进入阻塞状态
+    wait(){
+    	// 释放锁
+    	//阻塞，等待被其他线程 notify()
+    	// 重新拿锁
+    }
+    ```
+
+    
+
+- Condition机制  --- 必须和 Lock 一起使用
+
+  
+
+
+
+### 第二章  原子类（Atomic）
+
+**Unsafe 类中 CAS实现原子操作**
+
+#### 1. ABA 问题
+
+1. AtomicStampedRefference 这个类中 CAS 操作有四个参数，
+
+   ```java
+   // 前两个参数比较修改值
+   // 后两个参数比较版本号 解决 ABA问题
+   public boolean compareAndSet(V   expectedReference,
+                                    V   newReference,
+                                    int expectedStamp,
+                                    int newStamp) {
+           Pair<V> current = pair;
+           return
+               expectedReference == current.reference &&
+               expectedStamp == current.stamp &&
+               ((newReference == current.reference &&
+                 newStamp == current.stamp) ||
+                casPair(current, Pair.of(newReference, newStamp)));
+       }
+   ```
+
+2. AtomicMarkableReference 
+
+   1. 原理与 AtomicStampedRefference 这个类似 **AtomicMarkableReference** 对象里的版本号是 boolean类型 只能表示两中状态，可以有效缓解ABA问题，但是无法避免
+
+#### Striped64 与 LongAdder
+
+1. 大数字  分而治之 ---  把一个Long类型拆成一个 base变量外加多个 Cell，每个Cell包装一个Long变量，多个线程并发累加时候并发度
+
+
+
+
+
 ### 第六章 线程池与Future
 
 #### 1. 线程池实现原理
@@ -35,4 +100,23 @@
       - 抛出异常 --- AbortPolicy
       - 悄咪咪的吃掉 ---- DiscardPolicy
       - 丢掉等待时间最长的任务 --- DiscardOldPolicy
+
+ 
+
+#### 2. 四种并发模型
+
+1. 并行工作者（Parallel ） --- 传入的任务被分配到不同的工作者上
+   - 优点，添加更多工作者来提高系统并行度，
+   - 缺点：（业务数据，缓存数据，数据库连接池等）
+     - 共享状态数据的同步 会比较复杂，对共享数据的操作要保证线程可见，避免资源竞争，死锁等问题
+     - 访问共享数据，线程之间的相互竞争，资源 性能损耗，出现一定程度的串行化
+     - 任务执行顺序不确定
+2. 流水线模型 （Callback） --- 无共享并行模型
+   - 类似生产车间流水线上的工人，每个工人只负责一部分任务，当完成自己任务时，会转发给下一个工作者
+   - 优点：
+     - 无共享状态，无需考虑并发访问共享数据产生的并发性问题，基本类似于单线程操作
+     - 合理的作业顺序
+   - 缺点：
+     - 回调函数嵌套问题
+3. 函数式并行模型
 
