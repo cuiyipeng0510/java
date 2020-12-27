@@ -22,6 +22,7 @@ public class ArrayUtils {
      * @param value
      */
     public static void swap(int[] arr, int index, int value){
+        if(index == value) return;
         arr[index] = arr[index] ^ arr[value];
         arr[value] = arr[index] ^ arr[value];
         arr[index] = arr[index] ^ arr[value];

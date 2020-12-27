@@ -58,7 +58,7 @@
 
 #### 1. ABA 问题
 
-1. AtomicStampedRefference 这个类中 CAS 操作有四个参数，
+1. AtomicStampedReference 这个类中 CAS 操作有四个参数，
 
    ```java
    // 前两个参数比较修改值
@@ -134,7 +134,7 @@
 
  **参数运作流程:** 
 
-1. step1：判断当前线程数是否大于或等于corePoolSize。如果小于，则新建线程执行；如果大于，则进入step2。
+1. step1: 判断当前线程数是否大于或等于corePoolSize。如果小于，则新建线程执行；如果大于，则进入step2。
 
 2. step2: 判断当前队列是否已满，未满丢队列，满了进入step3
 
