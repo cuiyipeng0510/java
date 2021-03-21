@@ -8,6 +8,7 @@
    - wait() --- > watiing 状态  （释放锁，释放资源）
    - sleep() ----> blocking  阻塞 （不释放资源）
    - notify() ----> 随机唤醒watiing状态线程、进入 runnable、或 
+   - yield() ----> 运行状态转到可运行状态，放弃CPU执行时间
    
 2. 调用Thread 类中方法手动关闭 
    1. stop()

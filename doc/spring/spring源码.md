@@ -143,3 +143,20 @@ protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
 // 定义 MyAwareProcessor 实现 BeanPostProcessor 接口，实现 postProcessBeforeInitialization() 方法
 ```
 
+
+
+
+
+
+
+### 附加篇
+
+#### 1. springBoot怎么实现的自动装配
+
+- 启动类上边有  **@SpringBootApplication --> @EnableAutoConfiguration --> @Import(EnableAutoConfigurationImportSelector.class)**注解
+- 识别 **EnableAutoConfiguration** 类之后会加载 **META-INF/spring.factories** 配置文件里边对应属性
+- **@Import(EnableAutoConfigurationImportSelector.class)** 注解是在spring启动过程中 执行实现**BeanFactoryPostProcessor（BFPP）** 接口类中的方法**postProcessBeanDefinitionRegistry** 时候，在解析注解的核心类**ConfigurationClassPostProcessor** 处理的 
+- 处理的注解包括：**@Component @ComponentScan @PropertySource @Import @ImportResource @Bean** 等
+- 解析**@Import** 注解时候有一个延迟加载的方法 getImports()
+
+#### 2. @Configuration 注解添加的类都需要生成动态代理对象
