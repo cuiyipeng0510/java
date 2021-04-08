@@ -12,7 +12,7 @@ public class DemoApplication {
         ConfigurableApplicationContext cac = SpringApplication.run(DemoApplication.class, args);
         TestRedis bean = cac.getBean(TestRedis.class);
         bean.testRedis();
-//        Math.round(11.5);
+//        Math.round(11.5); Subtract multiple sets
     }
 
 }

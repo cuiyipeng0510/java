@@ -1,75 +1,63 @@
 package com.cuiyp.demo.demo;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Tuoxiaoxiao {
-    private int age;
-    private String name;
+    private static ReentrantLock lock = new ReentrantLock();
 
-    public Tuoxiaoxiao(String name, int age){
-        super();
-        this.name = name;
-        this.age = age;
-    }
-    private static final Tuoxiaoxiao Intence;
-    static {
-        Intence = new Tuoxiaoxiao();
-    }
-    public Tuoxiaoxiao(){
+    private static volatile  boolean flag = true;
+
+    private static Thread t1 = null;
+
+    public static void main(String[] args) throws InterruptedException {
+        InterruptTest();
 
     }
 
-    public static Tuoxiaoxiao getIntence(){
-        return Intence;
-    }
+    static void InterruptTest() {
+        t1 = new Thread() {
+            public void run() {
+                lock.lock();
+                try {
+                    TimeUnit.SECONDS.sleep(1000);
+                    System.out.println("t1 end");
+                    if(t1.isInterrupted()){
+                        System.out.println("11111111");
+                        throw new InterruptedException("jjjj");
+                    }
+                } catch (InterruptedException e) {
 
-    public int hashCode(){
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + this.age;
-        result = prime * result + ((name == null) ? 0: name.hashCode());
-        return result;
-    }
-    public static void main(String[] args) {
-
-        //breakTest();
-
-        //Tuoxiaoxiao a = new Tuoxiaoxiao("A",11);
-        //Tuoxiaoxiao b = new Tuoxiaoxiao("A",11);
-        //System.out.println("a.hashcode="  + a.hashCode());
-        //System.out.println("b.hashcode="  + b.hashCode());
-        Tuoxiaoxiao b = new Tuoxiaoxiao("B", 11);
-        System.out.println(b.age);
-        editAge(b);
-        System.out.println(b.age);
-
-        int num1 = 10;
-        int num2 = 20;
-        int temp = num1;
-        num1 = num2;
-        num2 = temp;
-        System.out.println(num1 + "---" + num2);
-    }
-
-    private static void editAge(Tuoxiaoxiao obj){
-        obj.age = 11111;
-    }
-    @Override
-    public boolean equals(Object obj){
-        return  true;
-    }
-
-    private static void breakTest(){
-
-
-
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                if (i == 0 && j == 0){
-                    System.out.println("当多层循环中嵌套，想要跳出最外层循环，这样做");
-                    break;
+                    System.out.println("t1 中断异常处理");
+                } finally {
+                    lock.unlock();
                 }
-                System.out.println("内层循环走不走");
+                System.out.println("t1 执行结束");
             }
-            System.out.println("只跳出一层循环");
+        };
+        t1.start();
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        t1.interrupt();
+
     }
+
+    private static void thread3() throws InterruptedException {
+        Thread t3 = new Thread(() -> {
+            int i = 0;
+            long starttime = System.currentTimeMillis();
+           while (flag){
+               i++;
+           }
+            System.out.println("t3 线程结束，i值为：" + i
+                    + "用时：" + (System.currentTimeMillis() - starttime));
+        });
+           t3.start();
+           TimeUnit.SECONDS.sleep(3);
+           flag = false;
+    }
+
 }
