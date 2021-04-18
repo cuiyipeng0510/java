@@ -1,6 +1,6 @@
 package com.cuiyp.demo.leetcode.sort;
 
-import com.cuiyp.demo.leetcode.utils.ArrayUtils;
+import com.cuiyp.demo.utils.ArrayUtils;
 
 /**
  * 快速排序

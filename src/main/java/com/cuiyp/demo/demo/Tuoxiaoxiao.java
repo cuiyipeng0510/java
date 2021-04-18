@@ -1,63 +1,160 @@
 package com.cuiyp.demo.demo;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.Random;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.LockSupport;
 
 public class Tuoxiaoxiao {
-    private static ReentrantLock lock = new ReentrantLock();
 
-    private static volatile  boolean flag = true;
 
-    private static Thread t1 = null;
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-    public static void main(String[] args) throws InterruptedException {
-        InterruptTest();
 
-    }
+//        getScheduledTPETest();
+        getThreadPoolExecutor();
 
-    static void InterruptTest() {
-        t1 = new Thread() {
-            public void run() {
-                lock.lock();
-                try {
-                    TimeUnit.SECONDS.sleep(1000);
-                    System.out.println("t1 end");
-                    if(t1.isInterrupted()){
-                        System.out.println("11111111");
-                        throw new InterruptedException("jjjj");
-                    }
-                } catch (InterruptedException e) {
+        phaser.bulkRegister(7);
+        for (int i=0;i<5;i++){
 
-                    System.out.println("t1 中断异常处理");
-                } finally {
-                    lock.unlock();
-                }
-                System.out.println("t1 执行结束");
-            }
-        };
-        t1.start();
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            new Thread(new Person("people" + i)).start();
         }
-        t1.interrupt();
+        new Thread(new Person("新郎")).start();
+        new Thread(new Person("新娘")).start();
+    }
+
+
+    private static void getThreadPoolExecutor() {
+        ExecutorService executorService = Executors.newFixedThreadPool(1);
+        for (int i = 0; i < 10; i++) {
+            executorService.execute(() -> {
+                System.out.println("在线程池里开始执行线程了");
+            });
+        }
+        System.out.println("执行完了");
+    }
+
+    private static void getScheduledTPETest() throws ExecutionException, InterruptedException {
+
+        ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
+//        scheduledThreadPoolExecutor.schedule(()-> System.out.println("输出延迟2s立即执行"),2,TimeUnit.SECONDS);
+//
+//        scheduledThreadPoolExecutor.scheduleAtFixedRate(()-> System.out.println("输出延迟1后立即执行，此后每一秒执行一次"),1,1,TimeUnit.SECONDS);
+
+        scheduledThreadPoolExecutor.scheduleWithFixedDelay(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("输出延迟两秒执行，包含睡眠时间，此后每隔两秒输出");
+        }, 1, 3, TimeUnit.SECONDS);
 
     }
 
-    private static void thread3() throws InterruptedException {
-        Thread t3 = new Thread(() -> {
-            int i = 0;
-            long starttime = System.currentTimeMillis();
-           while (flag){
-               i++;
-           }
-            System.out.println("t3 线程结束，i值为：" + i
-                    + "用时：" + (System.currentTimeMillis() - starttime));
+
+    static Random r = new Random();
+    static MarriagePhaser phaser = new MarriagePhaser();
+
+    static class MarriagePhaser extends Phaser {
+        @Override
+        protected boolean onAdvance(int phase, int registeredParties) {
+            switch (phase) {
+                case 0:
+                    System.out.println("所有人离开了" + registeredParties);
+                    System.out.println();
+                    return false;
+                case 2:
+                    System.out.println("所有人到齐了" + registeredParties);
+                    System.out.println();
+                    return false;
+                case 1:
+                    System.out.println("所有人吃饭了" + registeredParties);
+                    System.out.println();
+                    return false;
+
+                case 3:
+                    System.out.println("婚礼结束，新郎新娘抱抱" + registeredParties);
+                    System.out.println();
+                    return false;
+                default:
+                    return true;
+            }
+        }
+    }
+
+    static class Person implements Runnable{
+        private String name;
+
+        Person(String name){
+            this.name = name;
+        }
+
+        private void hug() throws InterruptedException {
+            if (name.equals("新郎")|| name.equals("新娘")){
+                TimeUnit.SECONDS.sleep(1);
+                System.out.println(name + "抱抱");
+                phaser.arriveAndAwaitAdvance();
+            }else phaser.arriveAndDeregister();
+        }
+
+        private void arrival() throws InterruptedException {
+            TimeUnit.SECONDS.sleep(1);
+            System.out.println(name + "到达");
+            phaser.arriveAndAwaitAdvance();
+        }
+        private void eat() throws InterruptedException {
+            TimeUnit.SECONDS.sleep(1);
+            System.out.println(name + "%s 吃饭");
+            phaser.arriveAndAwaitAdvance();
+        }
+
+        private void leave() throws InterruptedException {
+            TimeUnit.SECONDS.sleep(1);
+            System.out.println(name + "离开");
+            phaser.arriveAndAwaitAdvance();
+        }
+
+        @Override
+        public void run() {
+
+            try {
+                arrival();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                eat();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                leave();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                hug();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    static void LockSupport(){
+        Thread t2 = new Thread();
+        char[] a = "1234567".toCharArray();
+        char[]b = "abcdefg".toCharArray();
+        Thread t1 = new Thread(()->{
+            for (char i:a){
+                System.out.println(i);
+                LockSupport.unpark(t2);
+                LockSupport.park();
+            }
         });
-           t3.start();
-           TimeUnit.SECONDS.sleep(3);
-           flag = false;
-    }
+        t1.start();
 
+
+        t2.start();
+    }
 }

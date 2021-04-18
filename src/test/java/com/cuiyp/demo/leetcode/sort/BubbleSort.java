@@ -1,6 +1,6 @@
 package com.cuiyp.demo.leetcode.sort;
 
-import com.cuiyp.demo.leetcode.utils.ArrayUtils;
+import com.cuiyp.demo.utils.ArrayUtils;
 
 /**
  * 1. 0 ~ N-1 最大的数后移，直到第一次循环比较完毕

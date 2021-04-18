@@ -3,7 +3,7 @@
  * Thuisoft, Inc. All rights reserved. THUNISOFT PROPRIETARY/CONFIDENTIAL. Use
  * is subject to license terms.
  */
-package com.cuiyp.demo.leetcode.utils;
+package com.cuiyp.demo.utils;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;

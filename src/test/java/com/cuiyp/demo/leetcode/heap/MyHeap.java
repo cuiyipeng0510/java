@@ -1,6 +1,6 @@
 package com.cuiyp.demo.leetcode.heap;
 
-import com.cuiyp.demo.leetcode.utils.ArrayUtils;
+import com.cuiyp.demo.utils.ArrayUtils;
 
 import java.util.HashMap;
 

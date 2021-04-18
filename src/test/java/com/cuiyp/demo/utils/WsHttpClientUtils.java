@@ -1,4 +1,4 @@
-package com.cuiyp.demo.leetcode.utils;
+package com.cuiyp.demo.utils;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.IOUtils;

@@ -1,4 +1,4 @@
-package com.cuiyp.demo.leetcode.utils;
+package com.cuiyp.demo.utils;
 
 public class ArrayUtils {
     /**

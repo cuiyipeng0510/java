@@ -40,9 +40,8 @@ public class TestRedis {
 
         RedisConnection conn = redisTemplate.getConnectionFactory().getConnection();
 
-        conn.set("hello02".getBytes(),"mashibing".getBytes());
+        conn.set("hello02".getBytes(),"cuiyp".getBytes());
         System.out.println(new String(conn.get("hello02".getBytes())));
-
 
 //        HashOperations<String, Object, Object> hash = stringRedisTemplate.opsForHash();
 //        hash.put("sean","name","zhouzhilei");
