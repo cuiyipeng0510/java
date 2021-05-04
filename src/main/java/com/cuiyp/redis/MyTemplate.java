@@ -1,4 +1,4 @@
-package com.cuiyp.demo.demo.redis;
+package com.cuiyp.redis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

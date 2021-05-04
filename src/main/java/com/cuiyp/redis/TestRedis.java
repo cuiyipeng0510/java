@@ -1,4 +1,4 @@
-package com.cuiyp.demo.demo.redis;
+package com.cuiyp.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.hash.Jackson2HashMapper;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -33,42 +35,45 @@ public class TestRedis {
     public void testRedis(){
 
 
+        // high-level API
+        stringRedisTemplate.opsForValue().set("hello01","china");
 
-//        stringRedisTemplate.opsForValue().set("hello01","china");
-//
-//        System.out.println(stringRedisTemplate.opsForValue().get("hello01"));
+        System.out.println(stringRedisTemplate.opsForValue().get("hello01"));
 
+        // low-level API
         RedisConnection conn = redisTemplate.getConnectionFactory().getConnection();
 
         conn.set("hello02".getBytes(),"cuiyp".getBytes());
         System.out.println(new String(conn.get("hello02".getBytes())));
 
-//        HashOperations<String, Object, Object> hash = stringRedisTemplate.opsForHash();
-//        hash.put("sean","name","zhouzhilei");
-//        hash.put("sean","age","22");
-//
-//        System.out.println(hash.entries("sean"));
+        // 添加  hash
+        HashOperations<String, Object, Object> hash = stringRedisTemplate.opsForHash();
+        hash.put("sean","name","zhouzhilei");
+        hash.put("sean","age","22");
+
+        System.out.println(hash.entries("sean"));
+        // ====================
 
 
         Person p = new Person();
         p.setName("zhangsan");
         p.setAge(16);
 
-//        stringRedisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
-
+        // 字符串 序列化
+        stringRedisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
         Jackson2HashMapper jm = new Jackson2HashMapper(objectMapper, false);
-
         stringRedisTemplate.opsForHash().putAll("sean01",jm.toHash(p));
-
         Map map = stringRedisTemplate.opsForHash().entries("sean01");
 
         Person per = objectMapper.convertValue(map, Person.class);
         System.out.println(per.getName());
+        // ====================
 
 
         stringRedisTemplate.convertAndSend("ooxx","hello");
 
         RedisConnection cc = stringRedisTemplate.getConnectionFactory().getConnection();
+        // 消息发布订阅 publish
         cc.subscribe(new MessageListener() {
             @Override
             public void onMessage(Message message, byte[] pattern) {

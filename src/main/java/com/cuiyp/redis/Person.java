@@ -1,4 +1,4 @@
-package com.cuiyp.demo.demo.redis;
+package com.cuiyp.redis;
 
 /**
  * @author: cuiyp

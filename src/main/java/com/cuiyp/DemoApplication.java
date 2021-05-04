@@ -1,6 +1,6 @@
-package com.cuiyp.demo.demo;
+package com.cuiyp;
 
-import com.cuiyp.demo.demo.redis.TestRedis;
+import com.cuiyp.redis.TestRedis;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
