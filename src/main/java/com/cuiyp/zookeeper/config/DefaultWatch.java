@@ -6,7 +6,7 @@ import org.apache.zookeeper.Watcher;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * @author: 马士兵教育
+ * @author: cuiyp
  * @create: 2019-09-20 20:12
  */
 public class DefaultWatch  implements Watcher {

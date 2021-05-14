@@ -1,12 +1,13 @@
 package com.cuiyp.zookeeper.config;
 
+import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.zookeeper.ZooKeeper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * @author: 马士兵教育
+ * @author: cuiyp
  * @create: 2019-09-20 20:07
  */
 public class TestConfig {
@@ -32,7 +33,6 @@ public class TestConfig {
 
     @Test
     public void getConf(){
-
         WatchCallBack watchCallBack = new WatchCallBack();
         watchCallBack.setZk(zk);
         MyConf myConf = new MyConf();

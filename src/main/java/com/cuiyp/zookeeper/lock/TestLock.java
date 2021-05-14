@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * @author: 马士兵教育
+ * @author: cuiyp
  * @create: 2019-09-20 21:21
  */
 public class TestLock {

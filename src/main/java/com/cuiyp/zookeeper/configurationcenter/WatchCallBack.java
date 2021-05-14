@@ -9,7 +9,7 @@ import org.apache.zookeeper.data.Stat;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * @author: 马士兵教育
+ * @author: cuiyp
  * @create: 2019-09-20 14:48
  */
 public class WatchCallBack implements Watcher, AsyncCallback.DataCallback, AsyncCallback.StatCallback {

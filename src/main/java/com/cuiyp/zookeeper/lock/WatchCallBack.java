@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * @author: 马士兵教育
+ * @author: cuiyp
  * @create: 2019-09-20 21:26
  */
 public class WatchCallBack   implements Watcher, AsyncCallback.StringCallback ,AsyncCallback.Children2Callback ,AsyncCallback.StatCallback {
@@ -46,7 +46,7 @@ public class WatchCallBack   implements Watcher, AsyncCallback.StringCallback ,A
         try {
 
             System.out.println(threadName + "  create....");
-//            if(zk.getData("/"))
+//            if(zk.getData("/")) EPHEMERAL
             zk.create("/lock",threadName.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL,this,"abc");
 
             cc.await();

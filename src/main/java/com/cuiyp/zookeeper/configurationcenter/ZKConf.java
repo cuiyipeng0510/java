@@ -1,7 +1,7 @@
 package com.cuiyp.zookeeper.configurationcenter;
 
 /**
- * @author: 马士兵教育
+ * @author: cuiyp
  * @create: 2019-09-20 13:51
  */
 public class ZKConf {

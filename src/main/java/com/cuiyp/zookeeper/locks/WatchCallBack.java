@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * @author: 马士兵教育
+ * @author: cuiyp
  * @create: 2019-09-20 18:03
  */
 public class WatchCallBack implements Watcher, AsyncCallback.StringCallback, AsyncCallback.Children2Callback,AsyncCallback.StatCallback,AsyncCallback.DataCallback {
